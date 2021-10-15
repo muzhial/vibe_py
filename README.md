@@ -33,8 +33,8 @@ wget https://download.openmmlab.com/mmsegmentation/v0.5/deeplabv3plus/deeplabv3p
 
 ```bash
 python bgs.py \
-    --src_v /dataset/mz/outside_data/vibe_data/source_v2.avi \
-    --bg_out /dataset/mz/outside_data/vibe_data/deeplabv3plus_decode_0.35_l1.avi \
+    --src_v /dataset/mz/outside_data/vibe_data/source_v.avi \
+    --bg_out /dataset/mz/outside_data/vibe_data/deeplabv3plus_backbone0_0.35_l1.avi \
     --seg_config configs/deeplabv3plus/deeplabv3plus_r18-d8_512x1024_80k_cityscapes.py \
     --seg_checkpoints checkpoints/deeplabv3plus_r18-d8_512x1024_80k_cityscapes_20201226_080942-cff257fe.pth \
     --feature_type seg

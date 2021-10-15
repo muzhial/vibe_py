@@ -70,7 +70,7 @@ class LoadImage:
         results['ori_shape'] = results['img'].shape
         return results
 
-def inference_segmentor(model, img, feat_hierarchy='backbone:0'):
+def inference_segmentor(model, img, feat_hierarchy='decode'):
     cfg = model.cfg
     device = next(model.parameters()).device
     test_pipeline = [LoadImage()] + cfg.data.test.pipeline[1:]
@@ -94,7 +94,6 @@ def inference_segmentor(model, img, feat_hierarchy='backbone:0'):
             result = result[feat_index]  # -> tensor, 4 feats: 4x, 8x, 8x, 8x
         elif feat_hierarchy == 'decode':
             x = model.extract_feat(data['img'][0])
-            model.decode_head.conv_seg = torch.nn.Identity()
             result = model.decode_head.forward_test(
                 x, data['img_metas'], None)  # -> tensor
     return result
@@ -125,7 +124,7 @@ def extract_segmentation_feature(model, frame, opacity=0.5):
         result = result.squeeze()
     if len(result.size()) == 2:
         result = result.unsqueeze(0)
-    return result.detach()
+    return result
 
 def visualize_feature(frame, m):
     img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)

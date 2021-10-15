@@ -7,7 +7,7 @@ import torch
 from torchvision import transforms
 import timm
 
-from utils import hist_feature
+from utils import hist_feature, heatmap_feature
 
 
 class ViBe:
@@ -76,6 +76,7 @@ class ViBe:
         channel, height, width = img.size()
         img = img.to(self.device)
         # hist_feature(img, f'out/feat_hist.png')
+        # heatmap_feature(img, f'out/heatmap_feature.png')
         if self.dist_type == 'cosine':
             img_tile = torch.tile(img, [self.samples.shape(0), 1, 1, 1])
             dist = 1 - (self.samples * img_tile).sum(dim=1) / (
@@ -88,7 +89,7 @@ class ViBe:
             dist = (self.samples.float() - img.float()
                 ).abs().mean(dim=1)
 
-        hist_feature(dist, f'out/dist_hist.png')
+        # hist_feature(dist, f'out/dist_hist.png')
         mask_bg = dist < self.defaultRadius
         mask_fg = dist >= self.defaultRadius
         dist[mask_bg] = 1

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
 
 def hist_feature(x, hist_png):
@@ -11,3 +12,11 @@ def hist_feature(x, hist_png):
     print(x.max(), x.min())
     plt.hist(x, bins=100)
     plt.savefig(hist_png)
+
+
+def heatmap_feature(x, heatmap_png):
+    x = x.detach().cpu().numpy()
+    x = x[1, :, :]
+    plt.figure()
+    sns.heatmap(data=x)
+    plt.savefig(heatmap_png)

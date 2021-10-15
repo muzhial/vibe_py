@@ -100,6 +100,7 @@ def main():
             m, frame, args.feature_index, args.img_size, device=device)
     elif args.feature_type == 'seg':
         m = get_seg_model(args.seg_config, args.seg_checkpoints, device)
+        m.decode_head.conv_seg = torch.nn.Identity()
         feat_result = extract_segmentation_feature(m, frame)
 
     assert isinstance(feat_result, torch.Tensor
@@ -143,14 +144,12 @@ def main():
         if args.feature_type == 'cls':
             feat_result = extract_class_feature(
                 m, frame, args.feature_index, args.img_size, device=device)
-            # proc_feat = proc_feat * 255
-            # proc_feat = proc_feat.astype(np.uint8)
-            # proc_feat = cv2.cvtColor(proc_feat, cv2.COLOR_GRAY2RGB)
         elif args.feature_type == 'seg':
             feat_result = extract_segmentation_feature(m, frame)
+
         vibe.Update(feat_result)
         seg_mat = vibe.getFGMask()
-        seg_mat = seg_mat.detach().cpu().numpy().astype(np.uint8)
+        seg_mat = seg_mat.cpu().numpy().astype(np.uint8)
 
         if args.feat_out is not None:
             feat_out.write(cv2.cvtColor(seg_mat, cv2.COLOR_GRAY2BGR))
